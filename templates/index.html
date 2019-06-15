@@ -1,12 +1,25 @@
 <!doctype html>
 <html>
-    <head><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></head>
+    <head><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+        <script>
+         function clickImage(path){
+             console.log("clicked on " + path);
+
+             document.getElementById("photo_path").value = path;
+             document.getElementById("hidden_form").submit();
+         }
+        </script>
+    </head>
     <body>
         <div class="container">
             <h1>Simple image search engine</h1>
             <form method="POST" enctype="multipart/form-data">
                 <input type="file" name="query_img"><br>
                 <input type="submit">
+            </form>
+            <form method="POST" id="hidden_form">
+                <input hidden id="photo_path" name="photo_path"><br>
             </form>
             <h2>Query:</h2>
             {% if query_path %}
@@ -15,7 +28,7 @@
             <h2>Results:</h2>
             {% for score in scores %}
             <figure style="float: left; margin-right: 20px; margin-bottom: 20px;">
-                <img src="{{ score[1] }}" height="200px">
+                <img src="{{ score[1] }}" onClick="clickImage('{{ score[1] }}')" height="200px">
                 <figcaption>{{ score[0] }}</figcaption>
             </figure>
             {% endfor %}

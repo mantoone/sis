@@ -1,7 +1,7 @@
 static/*
-!static/feature
+static/feature
 !static/img
-!static/uploaded
+static/uploaded
 !.gitkeep
 
 # Byte-compiled / optimized / DLL files
