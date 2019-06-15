@@ -25,7 +25,7 @@ def cosine_similarity(ratings):
     return (sim / norms / norms.T)
 
 ft = np.array(features)
-cosine_similarity(ft)
+#cosine_similarity(ft)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -44,8 +44,8 @@ def index():
         img.thumbnail((1024, 768))
 
         query = fe.extract(img)
-        #dists = np.linalg.norm(features - query, axis=1)  # Do search
-        dists = 1.0-ft.dot(query)
+        dists = np.linalg.norm(features - query, axis=1)  # Do search
+        #dists = 1.0-ft.dot(query)
         ids = np.argsort(dists)[:30] # Top 30 results
         scores = [(dists[id], img_paths[id]) for id in ids]
 
@@ -53,7 +53,14 @@ def index():
                                query_path=uploaded_img_path,
                                scores=scores)
     else:
-        return render_template('index.html')
+        if 'random' in request.args:
+            ids = np.random.randint(0, len(img_paths)-1, size=30)
+            scores = [("", img_paths[id]) for id in ids]
+
+            return render_template('index.html',
+                                scores=scores)
+        else:
+            return render_template('index.html')
 
 if __name__=="__main__":
     app.run("0.0.0.0", "8889")
