@@ -1,6 +1,6 @@
 <!doctype html>
 <html>
-    <head><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <head>
 
         <script>
          function clickImage(path){
@@ -28,7 +28,7 @@
             {% endif %}
             <h2>Results:</h2>
             {% for score in scores %}
-            <figure style="float: left; margin-right: 20px; margin-bottom: 20px;">
+            <figure style="float: left; margin-right: 5px; margin-bottom: 5px;">
                 <img src="{{ score[1] }}" onClick="clickImage('{{ score[1] }}')" height="200px">
                 <figcaption>{{ score[0] }}</figcaption>
             </figure>

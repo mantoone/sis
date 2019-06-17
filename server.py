@@ -15,7 +15,7 @@ features = []
 img_paths = []
 for feature_path in glob.glob("static/feature/*"):
     features.append(pickle.load(open(feature_path, 'rb')))
-    img_paths.append('static/images/' + os.path.splitext(os.path.basename(feature_path))[0] + '.JPG')
+    img_paths.append('static/images/' + os.path.splitext(os.path.basename(feature_path))[0] + '.jpg')
 
 def cosine_similarity(ratings):
     sim = ratings.dot(ratings.T)
@@ -29,6 +29,9 @@ ft = np.array(features)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    num_imgs = 30
+    if 'number' in request.args:
+        num_imgs = max(1, int(request.args['number']))
     if request.method == 'POST':
         if 'photo_path' in request.form:
             photo_path = request.form['photo_path']
@@ -46,7 +49,7 @@ def index():
         query = fe.extract(img)
         dists = np.linalg.norm(features - query, axis=1)  # Do search
         #dists = 1.0-ft.dot(query)
-        ids = np.argsort(dists)[:30] # Top 30 results
+        ids = np.argsort(dists)[:num_imgs] # Top 30 results
         scores = [(dists[id], img_paths[id]) for id in ids]
 
         return render_template('index.html',
@@ -54,7 +57,7 @@ def index():
                                scores=scores)
     else:
         if 'random' in request.args:
-            ids = np.random.randint(0, len(img_paths)-1, size=30)
+            ids = np.random.randint(0, len(img_paths)-1, size=num_imgs)
             scores = [("", img_paths[id]) for id in ids]
 
             return render_template('index.html',
